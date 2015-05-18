@@ -11,9 +11,9 @@ new WebpackDevServer(webpack(config), {
     hot: true,
     inline: true,
     colors: true
-}).listen(8180, 'localhost', function(err, result){
+}).listen(8181, 'localhost', function(err, result){
         if(err){
             console.log(err);
         }
-        console.log('Listening at localhost:8180');
+        console.log('Listening at localhost:8181');
     });

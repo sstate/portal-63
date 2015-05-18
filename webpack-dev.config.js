@@ -19,7 +19,7 @@ if(process.env.NODE_ENV === 'PRODUCTION'){
     new webpack.NoErrorsPlugin()
   );
   entry.push(
-    'webpack-dev-server/client?http://localhost:8180',
+    'webpack-dev-server/client?http://localhost:8181',
     'webpack/hot/only-dev-server'
   );
   loaders.push(
@@ -36,7 +36,7 @@ module.exports = {
     libraryTarget: 'umd',
     path: path.join(__dirname, 'dist'),
     filename: 'Portal.js',
-    publicPath: 'http://localhost:8180/dist'
+    publicPath: 'http://localhost:8181/dist'
   },
 
   module: {

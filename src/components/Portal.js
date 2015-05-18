@@ -72,7 +72,7 @@ var Portal = React.createClass({
         break;
     }
     if (this.props.openByClickOn) {
-      return <div className="Portal__open-by-click-on" onClick={this.openPortal}>{this.props.openByClickOn}</div> ;
+      return <div className="Portal__open-by-click-on" onClick={this.openPortal}>{this.props.openByClickOn}</div>;
     } else {
       return null;
     }

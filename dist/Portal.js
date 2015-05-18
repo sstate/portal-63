@@ -1,13 +1,13 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("lcars"), require("react"));
+		module.exports = factory(require("react"), require("lcars"));
 	else if(typeof define === 'function' && define.amd)
-		define(["lcars", "react"], factory);
+		define(["react", "react"], factory);
 	else if(typeof exports === 'object')
-		exports["Portal"] = factory(require("lcars"), require("react"));
+		exports["Portal"] = factory(require("react"), require("lcars"));
 	else
-		root["Portal"] = factory(root["LCARS"], root["React"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_4__) {
+		root["Portal"] = factory(root["React"], root["LCARS"]);
+})(this, function(__WEBPACK_EXTERNAL_MODULE_4__, __WEBPACK_EXTERNAL_MODULE_7__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -54,158 +54,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(7);
+	module.exports = __webpack_require__(8);
 
 
 /***/ },
 /* 1 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __WEBPACK_EXTERNAL_MODULE_1__;
-
-/***/ },
-/* 2 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(4);
-	var Freighter = __webpack_require__(8);
-	var PortalStore = __webpack_require__(5);
-
-	var Portal = React.createClass({
-	  displayName: 'Portal',
-
-	  mixins: [Freighter],
-
-	  stores: [PortalStore],
-
-	  propTypes: {
-	    children: React.PropTypes.element.isRequired,
-	    onClose: React.PropTypes.func
-	  },
-
-	  getStateFromStores: function getStateFromStores() {
-	    return PortalStore.getStoreData();
-	  },
-
-	  componentWillUnmount: function componentWillUnmount() {
-	    this.closePortal();
-	  },
-
-	  openPortal: function openPortal() {
-	    if (!this.node) {
-	      this.node = document.createElement('div');
-	      document.body.appendChild(this.node);
-	    }
-	    this.portal = React.render(React.cloneElement(this.props.children, { closePortal: this.closePortal }), this.node);
-	  },
-
-	  closePortal: function closePortal() {
-	    if (this.node) {
-	      React.unmountComponentAtNode(this.node);
-	      document.body.removeChild(this.node);
-	    }
-	    this.portal = null;
-	    this.node = null;
-	    if (this.props.onClose) {
-	      this.props.onClose();
-	    }
-	  },
-
-	  render: function render() {
-	    var _this = this;
-
-	    var outPut = function outPut() {
-	      switch (_this.state.active) {
-	        case true:
-	          _this.openPortal();
-	          break;
-	        default:
-	          _this.closePortal();
-	          break;
-	      }
-	    };
-	    return React.createElement(
-	      'div',
-	      null,
-	      outPut()
-	    );
-	  }
-	});
-
-	module.exports = Portal;
-
-/***/ },
-/* 3 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var keyMirror = __webpack_require__(6);
-
-	var PortalConstants = {
-	  PORTAL: keyMirror({
-	    OPEN: null,
-	    CLOSE: null
-	  })
-	};
-
-	module.exports = PortalConstants;
-
-/***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __WEBPACK_EXTERNAL_MODULE_4__;
-
-/***/ },
-/* 5 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var LCARS = __webpack_require__(1);
-	var CargoBay = __webpack_require__(10);
-	var merge = __webpack_require__(11);
-	var PortalConstants = __webpack_require__(3);
-
-	var StoreData = {
-	  _data: {
-	    active: false
-	  },
-	  clonedData: function clonedData() {
-	    return JSON.parse(JSON.stringify(this._data));
-	  }
-	};
-
-	var PortalStore = merge(CargoBay, {
-	  set: function set(key, value) {
-	    StoreData._data[key] = value;
-	    return StoreData.clonedData();
-	  },
-	  getStoreData: function getStoreData() {
-	    return StoreData.clonedData();
-	  }
-	});
-
-	PortalStore.dispatchToken = LCARS.register(function (action) {
-	  switch (action.type) {
-	    case PortalConstants.PORTAL.OPEN:
-	      PortalStore.set('active', true);
-	      PortalStore.emitChange();
-	      break;
-	    case PortalConstants.PORTAL.CLOSE:
-	      PortalStore.set('active', false);
-	      PortalStore.emitChange();
-	      break;
-	  }
-	});
-
-	module.exports = PortalStore;
-
-/***/ },
-/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -222,7 +75,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var invariant = __webpack_require__(9);
+	var invariant = __webpack_require__(10);
 
 	/**
 	 * Constructs an enumeration with keys equal to their value.
@@ -262,7 +115,201 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(4);
+	var Freighter = __webpack_require__(9);
+	var PortalStore = __webpack_require__(5);
+	var PortalActions = __webpack_require__(6);
+
+	var Portal = React.createClass({
+	  displayName: 'Portal',
+
+	  mixins: [Freighter],
+
+	  stores: [PortalStore],
+
+	  propTypes: {
+	    children: React.PropTypes.element.isRequired,
+	    onClose: React.PropTypes.func
+	  },
+
+	  getStateFromStores: function getStateFromStores() {
+	    return PortalStore.getStoreData();
+	  },
+
+	  componentWillMount: function componentWillMount() {
+	    if (this.state.active) {
+	      this.openPortal();
+	    }
+	  },
+
+	  componentWillUnmount: function componentWillUnmount() {
+	    this.closePortal();
+	  },
+
+	  closePortal: function closePortal() {
+	    if (this.node) {
+	      React.unmountComponentAtNode(this.node);
+	      document.body.removeChild(this.node);
+	    }
+	    this.portal = null;
+	    this.node = null;
+	    if (this.props.onClose) {
+	      this.props.onClose();
+	    }
+	  },
+
+	  handleClose: function handleClose() {
+	    PortalActions.close();
+	  },
+
+	  renderPortal: function renderPortal() {
+	    if (!this.node) {
+	      this.node = document.createElement('div');
+	      document.body.appendChild(this.node);
+	      this.portal = React.render(React.cloneElement(this.props.children, { handleClose: this.handleClose }), this.node);
+	    }
+	    PortalActions.open();
+	  },
+
+	  openPortal: function openPortal(e) {
+	    if (e) {
+	      e.preventDefault();
+	      e.stopPropagation();
+	    }
+	    this.renderPortal();
+	  },
+	  render: function render() {
+	    switch (this.state.active) {
+	      case false:
+	        this.closePortal();
+	        break;
+	      case true:
+	        if (this.node) {
+	          this.portal = React.render(React.cloneElement(this.props.children, { handleClose: this.handleClose }), this.node);
+	        }
+	        break;
+	    }
+	    if (this.props.openByClickOn) {
+	      return React.createElement(
+	        'div',
+	        { className: 'Portal__open-by-click-on', onClick: this.openPortal },
+	        this.props.openByClickOn
+	      );
+	    } else {
+	      return null;
+	    }
+	  }
+
+	});
+
+	module.exports = Portal;
+
+/***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var keyMirror = __webpack_require__(1);
+
+	var PortalConstants = {
+	  PORTAL: keyMirror({
+	    OPEN: null,
+	    CLOSE: null
+	  })
+	};
+
+	module.exports = PortalConstants;
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __WEBPACK_EXTERNAL_MODULE_4__;
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var LCARS = __webpack_require__(7);
+	var CargoBay = __webpack_require__(11);
+	var merge = __webpack_require__(12);
+	var PortalConstants = __webpack_require__(3);
+
+	var StoreData = {
+	  _data: {
+	    active: false
+	  },
+	  clonedData: function clonedData() {
+	    return JSON.parse(JSON.stringify(this._data));
+	  }
+	};
+
+	var PortalStore = merge(CargoBay, {
+	  set: function set(key, value) {
+	    StoreData._data[key] = value;
+	    return StoreData.clonedData();
+	  },
+	  getStoreData: function getStoreData() {
+	    return StoreData.clonedData();
+	  }
+	});
+
+	PortalStore.dispatchToken = LCARS.register(function (action) {
+	  console.log(action.type);
+	  switch (action.type) {
+	    case PortalConstants.PORTAL.OPEN:
+	      PortalStore.set('active', true);
+	      PortalStore.emitChange();
+	      break;
+	    case PortalConstants.PORTAL.CLOSE:
+	      PortalStore.set('active', false);
+	      PortalStore.emitChange();
+	      break;
+	  }
+	});
+
+	module.exports = PortalStore;
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var LCARS = __webpack_require__(7);
+	var PortalConstants = __webpack_require__(3);
+
+	var PortalActions = {
+	  open: function open() {
+	    LCARS.dispatch({
+	      type: PortalConstants.PORTAL.OPEN
+	    });
+	  },
+	  close: function close() {
+	    LCARS.dispatch({
+	      type: PortalConstants.PORTAL.CLOSE
+	    });
+	  }
+	};
+
+	module.exports = PortalActions;
+
+/***/ },
 /* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __WEBPACK_EXTERNAL_MODULE_7__;
+
+/***/ },
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -276,7 +323,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -313,7 +360,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Freighter;
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -372,13 +419,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var EventEmitter = __webpack_require__(12).EventEmitter;
-	var merge = __webpack_require__(11);
+	var EventEmitter = __webpack_require__(13).EventEmitter;
+	var merge = __webpack_require__(12);
 	var CHANGE_EVENT = 'change';
 	var _current_cid = 0;
 
@@ -407,10 +454,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = CargoBay;
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var extend = __webpack_require__(13);
+	var extend = __webpack_require__(14);
 
 	module.exports = function merge() {
 	    var args = [].slice.call(arguments);
@@ -419,7 +466,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -726,10 +773,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isObject = __webpack_require__(14);
+	var isObject = __webpack_require__(15);
 
 
 	module.exports = function(obj) {
@@ -746,7 +793,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function isObject(obj) {
