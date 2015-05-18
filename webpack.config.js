@@ -6,7 +6,7 @@ var plugins = [
     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
   })
 ];
-var entry = ['./examples/app'];
+var entry = ['./src/index'];
 var loaders = [];
 
 if(process.env.NODE_ENV === 'PRODUCTION'){

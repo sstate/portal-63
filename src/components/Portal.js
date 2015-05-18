@@ -1,11 +1,10 @@
-var React = require('react/addons');
-var PureRenderMixin = React.addons.PureRenderMixin;
+var React = require('react');
 var Freighter = require('freighter');
 var PortalStore = require('./../stores/PortalStore');
 
 var Portal = React.createClass({
 
-  mixins: [PureRenderMixin, Freighter],
+  mixins: [Freighter],
 
   stores: [PortalStore],
 

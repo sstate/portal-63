@@ -1,7 +1,9 @@
 var React = require('react/addons');
 var PortalActions = require('./../actions/PortalActions');
-var Portal = require('./../../src/index').component;
+var Portal = require('./../../dist/Portal');
 var Modal = require('./Modal');
+
+console.log(Portal)
 
 var Button = React.createClass({
 
