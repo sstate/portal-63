@@ -1,0 +1,23 @@
+# portal-63
+
+This assumes you have react and babel build tools in your project
+
+For now, run the examples to see how to implement this Portal
+
+#### Run examples
+
+```
+npm install
+
+npm start
+```
+
+then open examples/index.html in your browser
+
+#### Run tests
+
+```
+npm install
+
+npm test
+```
