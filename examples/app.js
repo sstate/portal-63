@@ -2,6 +2,6 @@
 
 global.React = require('react');
 
-var Button = require('./components/Button');
+var Controller = require('./components/Controller');
 
-React.render(<Button />, document.getElementById('example'));
+React.render(<Controller />, document.getElementById('example'));

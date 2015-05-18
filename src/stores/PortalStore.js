@@ -23,6 +23,7 @@ var PortalStore = merge(CargoBay,{
 });
 
 PortalStore.dispatchToken = LCARS.register(function(action){
+  console.log(action.type)
   switch (action.type){
     case PortalConstants.PORTAL.OPEN:
       PortalStore.set('active', true);

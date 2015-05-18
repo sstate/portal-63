@@ -33,7 +33,7 @@ var Button = React.createClass({
       <div>
         <Portal openByClickOn={Button}>
           <Modal>
-            <p>this is a modal ONEsssssssss!!</p>
+            <p>this is a modal TWO</p>
             <button onClick={this.handleCloseModal}>close modal</button>
           </Modal>
         </Portal>

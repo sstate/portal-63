@@ -28,7 +28,7 @@ var Modal = React.createClass({
   render: function() {
     return (
       <div style={activeStyle}>
-        <div style={backgroundStyle} onClick={this.props.closePortal}></div>
+        <div style={backgroundStyle} onClick={this.props.handleClose}></div>
         <div style={modalContent}>
           {this.props.children}
         </div>

@@ -1,6 +1,7 @@
 var React = require('react');
 var Freighter = require('freighter');
 var PortalStore = require('./../stores/PortalStore');
+var PortalActions = require('./../actions/PortalActions');
 
 var Portal = React.createClass({
 
@@ -17,16 +18,14 @@ var Portal = React.createClass({
     return PortalStore.getStoreData();
   },
 
-  componentWillUnmount(){
-    this.closePortal();
+  componentWillMount() {
+    if (this.state.active) {
+      this.openPortal();
+    }
   },
 
-  openPortal(){
-    if (!this.node) {
-      this.node = document.createElement('div');
-      document.body.appendChild(this.node);
-    }
-    this.portal = React.render(React.cloneElement(this.props.children, {closePortal: this.closePortal}), this.node);
+  componentWillUnmount(){
+    this.closePortal();
   },
 
   closePortal() {
@@ -41,23 +40,44 @@ var Portal = React.createClass({
     }
   },
 
+  handleClose(){
+    PortalActions.close();
+  },
+
+  renderPortal(){
+    if (!this.node) {
+      this.node = document.createElement('div');
+      document.body.appendChild(this.node);
+      this.portal = React.render(React.cloneElement(this.props.children, {handleClose: this.handleClose}), this.node);
+    }
+    PortalActions.open();
+  },
+
+  openPortal(e) {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    this.renderPortal();
+  },
   render() {
-    var outPut = ()=> {
-      switch(this.state.active){
-        case true:
-          this.openPortal();
-          break;
-        default:
-          this.closePortal();
+    switch(this.state.active){
+      case false:
+        this.closePortal();
         break;
-      }
-    };
-    return (
-      <div>
-        {outPut()}
-      </div>
-    );
+      case true:
+        if (this.node){
+          this.portal = React.render(React.cloneElement(this.props.children, {handleClose: this.handleClose}), this.node);
+        }
+        break;
+    }
+    if (this.props.openByClickOn) {
+      return <div className="Portal__open-by-click-on" onClick={this.openPortal}>{this.props.openByClickOn}</div> ;
+    } else {
+      return null;
+    }
   }
+
 });
 
 module.exports = Portal;

@@ -1,13 +1,13 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("react"));
+		module.exports = factory(require("lcars"), require("react"));
 	else if(typeof define === 'function' && define.amd)
-		define(["react"], factory);
+		define(["lcars", "react"], factory);
 	else if(typeof exports === 'object')
-		exports["Portal"] = factory(require("react"));
+		exports["Portal"] = factory(require("lcars"), require("react"));
 	else
-		root["Portal"] = factory(root["React"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_4__) {
+		root["Portal"] = factory(root["LCARS"], root["React"]);
+})(this, function(__WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_4__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -54,46 +54,14 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(10);
+	module.exports = __webpack_require__(7);
 
 
 /***/ },
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	var Dispatcher = __webpack_require__(15);
-	var extend = __webpack_require__(16);
-	var queue = __webpack_require__(13);
-
-	var _action_queue = queue({
-	  concurrency: 1
-	});
-
-	var LCARS = new Dispatcher();
-
-	extend(LCARS, {
-
-	  _dispatch: LCARS.dispatch,
-
-	  /**
-	   * @param {object} action
-	   */
-	  dispatch: function(action){
-
-	    _action_queue.push(function(cb) {
-	      this._dispatch(action);
-	      cb();
-	    }.bind(this));
-
-	    _action_queue.start();
-
-	  }
-
-	});
-
-	module.exports = LCARS;
+	module.exports = __WEBPACK_EXTERNAL_MODULE_1__;
 
 /***/ },
 /* 2 */
@@ -102,7 +70,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	var React = __webpack_require__(4);
-	var Freighter = __webpack_require__(7);
+	var Freighter = __webpack_require__(8);
 	var PortalStore = __webpack_require__(5);
 
 	var Portal = React.createClass({
@@ -198,7 +166,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	var LCARS = __webpack_require__(1);
-	var CargoBay = __webpack_require__(9);
+	var CargoBay = __webpack_require__(10);
 	var merge = __webpack_require__(11);
 	var PortalConstants = __webpack_require__(3);
 
@@ -254,7 +222,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var invariant = __webpack_require__(8);
+	var invariant = __webpack_require__(9);
 
 	/**
 	 * Constructs an enumeration with keys equal to their value.
@@ -299,6 +267,20 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	var PortalComponent = __webpack_require__(2);
+	var PortalConstants = __webpack_require__(3);
+
+	module.exports = {
+	  component: PortalComponent,
+	  constants: PortalConstants
+	};
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
 	var Freighter = {
 
 	  getInitialState: function(){
@@ -331,7 +313,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Freighter;
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -390,7 +372,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -425,24 +407,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = CargoBay;
 
 /***/ },
-/* 10 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var PortalComponent = __webpack_require__(2);
-	var PortalConstants = __webpack_require__(3);
-
-	module.exports = {
-	  component: PortalComponent,
-	  constants: PortalConstants
-	};
-
-/***/ },
 /* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var extend = __webpack_require__(14);
+	var extend = __webpack_require__(13);
 
 	module.exports = function merge() {
 	    var args = [].slice.call(arguments);
@@ -761,541 +729,24 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var inherits = __webpack_require__(18);
-	var EventEmitter = __webpack_require__(12).EventEmitter;
+	var isObject = __webpack_require__(14);
 
-	module.exports = Queue;
 
-	function Queue(options) {
-	  if (!(this instanceof Queue))
-	    return new Queue(options);
-	  
-	  EventEmitter.call(this);
-	  options = options || {};
-	  this.concurrency = options.concurrency || Infinity;
-	  this.timeout = options.timeout || 0;
-	  this.pending = 0;
-	  this.session = 0;
-	  this.running = false;
-	  this.jobs = [];
-	}
-	inherits(Queue, EventEmitter);
-
-	var arrayMethods = [
-	  'push',
-	  'unshift',
-	  'splice',
-	  'pop',
-	  'shift',
-	  'slice',
-	  'reverse',
-	  'indexOf',
-	  'lastIndexOf'
-	];
-
-	for (var method in arrayMethods) (function(method) {
-	  Queue.prototype[method] = function() {
-	    return Array.prototype[method].apply(this.jobs, arguments);
-	  };
-	})(arrayMethods[method]);
-
-	Object.defineProperty(Queue.prototype, 'length', { get: function() {
-	  return this.pending + this.jobs.length;
-	}});
-
-	Queue.prototype.start = function(cb) {
-	  if (cb) {
-	    callOnErrorOrEnd.call(this, cb);
-	  }
-
-	  if (this.pending === this.concurrency) {
-	    return;
-	  }
-	  
-	  if (this.jobs.length === 0) {
-	    if (this.pending === 0) {
-	      done.call(this);
-	    }
-	    return;
-	  }
-	  
-	  var self = this;
-	  var job = this.jobs.shift();
-	  var once = true;
-	  var session = this.session;
-	  var timeoutId = null;
-	  var didTimeout = false;
-	  
-	  function next(err, result) {
-	    if (once && self.session === session) {
-	      once = false;
-	      self.pending--;
-	      if (timeoutId !== null) {
-	        clearTimeout(timeoutId);
-	      }
-	      
-	      if (err) {
-	        self.emit('error', err, job);
-	      } else if (didTimeout === false) {
-	        self.emit('success', result, job);
-	      }
-	      
-	      if (self.session === session) {
-	        if (self.pending === 0 && self.jobs.length === 0) {
-	          done.call(self);
-	        } else if (self.running) {
-	          self.start();
+	module.exports = function(obj) {
+	    if (!isObject(obj)) return obj;
+	    var source, prop;
+	    for (var i = 1, length = arguments.length; i < length; i++) {
+	        source = arguments[i];
+	        for (prop in source) {
+	            obj[prop] = source[prop];
 	        }
-	      }
 	    }
-	  }
-	  
-	  if (this.timeout) {
-	    timeoutId = setTimeout(function() {
-	      didTimeout = true;
-	      if (self.listeners('timeout').length > 0) {
-	        self.emit('timeout', next, job);
-	      } else {
-	        next();
-	      }
-	    }, this.timeout);
-	  }
-	  
-	  this.pending++;
-	  this.running = true;
-	  job(next);
-	  
-	  if (this.jobs.length > 0) {
-	    this.start();
-	  }
+	    return obj;
 	};
-
-	Queue.prototype.stop = function() {
-	  this.running = false;
-	};
-
-	Queue.prototype.end = function(err) {
-	  this.jobs.length = 0;
-	  this.pending = 0;
-	  done.call(this, err);
-	};
-
-	function callOnErrorOrEnd(cb) {
-	  var self = this;
-	  this.on('error', onerror);
-	  this.on('end', onend);
-
-	  function onerror(err) { self.end(err); }
-	  function onend(err) {
-	    self.removeListener('error', onerror);
-	    self.removeListener('end', onend);
-	    cb(err);
-	  }
-	}
-
-	function done(err) {
-	  this.session++;
-	  this.running = false;
-	  this.emit('end', err);
-	}
 
 
 /***/ },
 /* 14 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var isObject = __webpack_require__(19);
-
-
-	module.exports = function(obj) {
-	    if (!isObject(obj)) return obj;
-	    var source, prop;
-	    for (var i = 1, length = arguments.length; i < length; i++) {
-	        source = arguments[i];
-	        for (prop in source) {
-	            obj[prop] = source[prop];
-	        }
-	    }
-	    return obj;
-	};
-
-
-/***/ },
-/* 15 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*
-	 * Copyright (c) 2014, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule Dispatcher
-	 * @typechecks
-	 */
-
-	"use strict";
-
-	var invariant = __webpack_require__(17);
-
-	var _lastID = 1;
-	var _prefix = 'ID_';
-
-	/**
-	 * Dispatcher is used to broadcast payloads to registered callbacks. This is
-	 * different from generic pub-sub systems in two ways:
-	 *
-	 *   1) Callbacks are not subscribed to particular events. Every payload is
-	 *      dispatched to every registered callback.
-	 *   2) Callbacks can be deferred in whole or part until other callbacks have
-	 *      been executed.
-	 *
-	 * For example, consider this hypothetical flight destination form, which
-	 * selects a default city when a country is selected:
-	 *
-	 *   var flightDispatcher = new Dispatcher();
-	 *
-	 *   // Keeps track of which country is selected
-	 *   var CountryStore = {country: null};
-	 *
-	 *   // Keeps track of which city is selected
-	 *   var CityStore = {city: null};
-	 *
-	 *   // Keeps track of the base flight price of the selected city
-	 *   var FlightPriceStore = {price: null}
-	 *
-	 * When a user changes the selected city, we dispatch the payload:
-	 *
-	 *   flightDispatcher.dispatch({
-	 *     actionType: 'city-update',
-	 *     selectedCity: 'paris'
-	 *   });
-	 *
-	 * This payload is digested by `CityStore`:
-	 *
-	 *   flightDispatcher.register(function(payload) {
-	 *     if (payload.actionType === 'city-update') {
-	 *       CityStore.city = payload.selectedCity;
-	 *     }
-	 *   });
-	 *
-	 * When the user selects a country, we dispatch the payload:
-	 *
-	 *   flightDispatcher.dispatch({
-	 *     actionType: 'country-update',
-	 *     selectedCountry: 'australia'
-	 *   });
-	 *
-	 * This payload is digested by both stores:
-	 *
-	 *    CountryStore.dispatchToken = flightDispatcher.register(function(payload) {
-	 *     if (payload.actionType === 'country-update') {
-	 *       CountryStore.country = payload.selectedCountry;
-	 *     }
-	 *   });
-	 *
-	 * When the callback to update `CountryStore` is registered, we save a reference
-	 * to the returned token. Using this token with `waitFor()`, we can guarantee
-	 * that `CountryStore` is updated before the callback that updates `CityStore`
-	 * needs to query its data.
-	 *
-	 *   CityStore.dispatchToken = flightDispatcher.register(function(payload) {
-	 *     if (payload.actionType === 'country-update') {
-	 *       // `CountryStore.country` may not be updated.
-	 *       flightDispatcher.waitFor([CountryStore.dispatchToken]);
-	 *       // `CountryStore.country` is now guaranteed to be updated.
-	 *
-	 *       // Select the default city for the new country
-	 *       CityStore.city = getDefaultCityForCountry(CountryStore.country);
-	 *     }
-	 *   });
-	 *
-	 * The usage of `waitFor()` can be chained, for example:
-	 *
-	 *   FlightPriceStore.dispatchToken =
-	 *     flightDispatcher.register(function(payload) {
-	 *       switch (payload.actionType) {
-	 *         case 'country-update':
-	 *           flightDispatcher.waitFor([CityStore.dispatchToken]);
-	 *           FlightPriceStore.price =
-	 *             getFlightPriceStore(CountryStore.country, CityStore.city);
-	 *           break;
-	 *
-	 *         case 'city-update':
-	 *           FlightPriceStore.price =
-	 *             FlightPriceStore(CountryStore.country, CityStore.city);
-	 *           break;
-	 *     }
-	 *   });
-	 *
-	 * The `country-update` payload will be guaranteed to invoke the stores'
-	 * registered callbacks in order: `CountryStore`, `CityStore`, then
-	 * `FlightPriceStore`.
-	 */
-
-	  function Dispatcher() {
-	    this.$Dispatcher_callbacks = {};
-	    this.$Dispatcher_isPending = {};
-	    this.$Dispatcher_isHandled = {};
-	    this.$Dispatcher_isDispatching = false;
-	    this.$Dispatcher_pendingPayload = null;
-	  }
-
-	  /**
-	   * Registers a callback to be invoked with every dispatched payload. Returns
-	   * a token that can be used with `waitFor()`.
-	   *
-	   * @param {function} callback
-	   * @return {string}
-	   */
-	  Dispatcher.prototype.register=function(callback) {
-	    var id = _prefix + _lastID++;
-	    this.$Dispatcher_callbacks[id] = callback;
-	    return id;
-	  };
-
-	  /**
-	   * Removes a callback based on its token.
-	   *
-	   * @param {string} id
-	   */
-	  Dispatcher.prototype.unregister=function(id) {
-	    invariant(
-	      this.$Dispatcher_callbacks[id],
-	      'Dispatcher.unregister(...): `%s` does not map to a registered callback.',
-	      id
-	    );
-	    delete this.$Dispatcher_callbacks[id];
-	  };
-
-	  /**
-	   * Waits for the callbacks specified to be invoked before continuing execution
-	   * of the current callback. This method should only be used by a callback in
-	   * response to a dispatched payload.
-	   *
-	   * @param {array<string>} ids
-	   */
-	  Dispatcher.prototype.waitFor=function(ids) {
-	    invariant(
-	      this.$Dispatcher_isDispatching,
-	      'Dispatcher.waitFor(...): Must be invoked while dispatching.'
-	    );
-	    for (var ii = 0; ii < ids.length; ii++) {
-	      var id = ids[ii];
-	      if (this.$Dispatcher_isPending[id]) {
-	        invariant(
-	          this.$Dispatcher_isHandled[id],
-	          'Dispatcher.waitFor(...): Circular dependency detected while ' +
-	          'waiting for `%s`.',
-	          id
-	        );
-	        continue;
-	      }
-	      invariant(
-	        this.$Dispatcher_callbacks[id],
-	        'Dispatcher.waitFor(...): `%s` does not map to a registered callback.',
-	        id
-	      );
-	      this.$Dispatcher_invokeCallback(id);
-	    }
-	  };
-
-	  /**
-	   * Dispatches a payload to all registered callbacks.
-	   *
-	   * @param {object} payload
-	   */
-	  Dispatcher.prototype.dispatch=function(payload) {
-	    invariant(
-	      !this.$Dispatcher_isDispatching,
-	      'Dispatch.dispatch(...): Cannot dispatch in the middle of a dispatch.'
-	    );
-	    this.$Dispatcher_startDispatching(payload);
-	    try {
-	      for (var id in this.$Dispatcher_callbacks) {
-	        if (this.$Dispatcher_isPending[id]) {
-	          continue;
-	        }
-	        this.$Dispatcher_invokeCallback(id);
-	      }
-	    } finally {
-	      this.$Dispatcher_stopDispatching();
-	    }
-	  };
-
-	  /**
-	   * Is this Dispatcher currently dispatching.
-	   *
-	   * @return {boolean}
-	   */
-	  Dispatcher.prototype.isDispatching=function() {
-	    return this.$Dispatcher_isDispatching;
-	  };
-
-	  /**
-	   * Call the callback stored with the given id. Also do some internal
-	   * bookkeeping.
-	   *
-	   * @param {string} id
-	   * @internal
-	   */
-	  Dispatcher.prototype.$Dispatcher_invokeCallback=function(id) {
-	    this.$Dispatcher_isPending[id] = true;
-	    this.$Dispatcher_callbacks[id](this.$Dispatcher_pendingPayload);
-	    this.$Dispatcher_isHandled[id] = true;
-	  };
-
-	  /**
-	   * Set up bookkeeping needed when dispatching.
-	   *
-	   * @param {object} payload
-	   * @internal
-	   */
-	  Dispatcher.prototype.$Dispatcher_startDispatching=function(payload) {
-	    for (var id in this.$Dispatcher_callbacks) {
-	      this.$Dispatcher_isPending[id] = false;
-	      this.$Dispatcher_isHandled[id] = false;
-	    }
-	    this.$Dispatcher_pendingPayload = payload;
-	    this.$Dispatcher_isDispatching = true;
-	  };
-
-	  /**
-	   * Clear bookkeeping used for dispatching.
-	   *
-	   * @internal
-	   */
-	  Dispatcher.prototype.$Dispatcher_stopDispatching=function() {
-	    this.$Dispatcher_pendingPayload = null;
-	    this.$Dispatcher_isDispatching = false;
-	  };
-
-
-	module.exports = Dispatcher;
-
-
-/***/ },
-/* 16 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var isObject = __webpack_require__(20);
-
-
-	module.exports = function(obj) {
-	    if (!isObject(obj)) return obj;
-	    var source, prop;
-	    for (var i = 1, length = arguments.length; i < length; i++) {
-	        source = arguments[i];
-	        for (prop in source) {
-	            obj[prop] = source[prop];
-	        }
-	    }
-	    return obj;
-	};
-
-
-/***/ },
-/* 17 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright (c) 2014, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule invariant
-	 */
-
-	"use strict";
-
-	/**
-	 * Use invariant() to assert state which your program assumes to be true.
-	 *
-	 * Provide sprintf-style format (only %s is supported) and arguments
-	 * to provide information about what broke and what you were
-	 * expecting.
-	 *
-	 * The invariant message will be stripped in production, but the invariant
-	 * will remain to ensure logic does not differ in production.
-	 */
-
-	var invariant = function(condition, format, a, b, c, d, e, f) {
-	  if (false) {
-	    if (format === undefined) {
-	      throw new Error('invariant requires an error message argument');
-	    }
-	  }
-
-	  if (!condition) {
-	    var error;
-	    if (format === undefined) {
-	      error = new Error(
-	        'Minified exception occurred; use the non-minified dev environment ' +
-	        'for the full error message and additional helpful warnings.'
-	      );
-	    } else {
-	      var args = [a, b, c, d, e, f];
-	      var argIndex = 0;
-	      error = new Error(
-	        'Invariant Violation: ' +
-	        format.replace(/%s/g, function() { return args[argIndex++]; })
-	      );
-	    }
-
-	    error.framesToPop = 1; // we don't care about invariant's own frame
-	    throw error;
-	  }
-	};
-
-	module.exports = invariant;
-
-
-/***/ },
-/* 18 */
-/***/ function(module, exports, __webpack_require__) {
-
-	if (typeof Object.create === 'function') {
-	  // implementation from standard node.js 'util' module
-	  module.exports = function inherits(ctor, superCtor) {
-	    ctor.super_ = superCtor
-	    ctor.prototype = Object.create(superCtor.prototype, {
-	      constructor: {
-	        value: ctor,
-	        enumerable: false,
-	        writable: true,
-	        configurable: true
-	      }
-	    });
-	  };
-	} else {
-	  // old school shim for old browsers
-	  module.exports = function inherits(ctor, superCtor) {
-	    ctor.super_ = superCtor
-	    var TempCtor = function () {}
-	    TempCtor.prototype = superCtor.prototype
-	    ctor.prototype = new TempCtor()
-	    ctor.prototype.constructor = ctor
-	  }
-	}
-
-
-/***/ },
-/* 19 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = function isObject(obj) {
-	    var type = typeof obj;
-	    return !!obj && (type === 'function' || type === 'object');
-	};
-
-
-/***/ },
-/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function isObject(obj) {

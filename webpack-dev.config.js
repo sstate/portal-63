@@ -6,7 +6,7 @@ var plugins = [
     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
   })
 ];
-var entry = ['./src/index'];
+var entry = ['./examples/app'];
 var loaders = [];
 
 if(process.env.NODE_ENV === 'PRODUCTION'){
@@ -38,25 +38,6 @@ module.exports = {
     filename: 'Portal.js',
     publicPath: 'http://localhost:8180/dist'
   },
-
-  externals: [
-    {
-      "react": {
-        root: "React",
-        commonjs2: "react",
-        commonjs: "react",
-        amd: "react"
-      }
-    },
-    {
-      "lcars": {
-        root: "LCARS",
-        commonjs2: "lcars",
-        commonjs: "lcars",
-        amd: "react"
-      }
-    }
-  ],
 
   module: {
     loaders: loaders
