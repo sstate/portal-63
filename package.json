@@ -1,9 +1,9 @@
 {
   "name": "portal-63",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A flux/hot-reload compantable Portal",
   "license": "MIT",
-  "main": "src/index.js",
+  "main": "dist/Portal.js",
   "repository": {
     "type": "git",
     "url": "git@github.com:sstate/portal-63.git"
