@@ -1,7 +1,5 @@
 # portal-63
 
-This assumes you have react and babel build tools in your project
-
 For now, run the examples to see how to implement this Portal
 
 #### Run examples
