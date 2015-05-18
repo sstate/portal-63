@@ -1,11 +1,12 @@
-var React = require('react');
+var React = require('react/addons');
+var PureRenderMixin = React.addons.PureRenderMixin;
 var Freighter = require('freighter');
 var PortalStore = require('./../stores/PortalStore');
 var PortalActions = require('./../actions/PortalActions');
 
 var Portal = React.createClass({
 
-  mixins: [Freighter],
+  mixins: [PureRenderMixin, Freighter],
 
   stores: [PortalStore],
 
@@ -35,9 +36,6 @@ var Portal = React.createClass({
     }
     this.portal = null;
     this.node = null;
-    if (this.props.onClose) {
-      this.props.onClose();
-    }
   },
 
   handleClose(){
@@ -53,14 +51,7 @@ var Portal = React.createClass({
     PortalActions.open();
   },
 
-  openPortal(e) {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-    this.renderPortal();
-  },
-  render() {
+  componentDidUpdate(){
     switch(this.state.active){
       case false:
         this.closePortal();
@@ -71,6 +62,17 @@ var Portal = React.createClass({
         }
         break;
     }
+  },
+
+  openPortal(e) {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    this.renderPortal();
+  },
+
+  render() {
     if (this.props.openByClickOn) {
       return <div className="Portal__open-by-click-on" onClick={this.openPortal}>{this.props.openByClickOn}</div>;
     } else {

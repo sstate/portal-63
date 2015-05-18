@@ -1,6 +1,6 @@
 {
   "name": "portal-63",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A flux/hot-reload compantable Portal",
   "license": "MIT",
   "main": "dist/Portal.js",
@@ -25,7 +25,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "peerDependencies": {
-    "react": "0.13.x"
+    "react": "0.13.x",
+    "lcars": "^1.0.8"
   },
   "devDependencies": {
     "babel-core": "^5.4.2",
@@ -43,7 +44,6 @@
     "amp-merge": "^1.0.0",
     "cargo-bay": "^1.0.3",
     "flux": "^2.0.3",
-    "freighter": "^1.0.4",
-    "lcars": "^1.0.8"
+    "freighter": "^1.0.4"
   }
 }
