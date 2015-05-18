@@ -1,7 +1,7 @@
 {
   "name": "portal-63",
-  "version": "1.0.7",
-  "description": "A flux/hot-reload compantable Portal",
+  "version": "1.0.8",
+  "description": "A flux/hot-reload compatible Portal",
   "license": "MIT",
   "main": "dist/Portal.js",
   "repository": {
